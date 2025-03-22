@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/* Dashboard Container */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  padding: 20px;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+}
+
+.dashboard-header h2 {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #cc0000;
+}
+
+/* Content Section */
+.dashboard-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Resume Upload Section */
+.upload-section {
+  text-align: center;
+  padding: 20px;
+  border: 2px dashed #4CAF50;
+  border-radius: 10px;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.file-upload-label {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+  margin: 10px;
+}
+
+.file-upload-label:hover {
+  background-color: #388E3C;
+}
+
+.upload-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #388E3C;
+}
+
+.upload-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Job Recommendations */
+/* Job Recommendations */
+.recommendations-section {
+  text-align: center;
+  padding: 20px;
+  border: 2px dashed #ffdd57;
+  border-radius: 10px;
+  background-color: rgba(255, 221, 87, 0.1);
+}
+
+.recommendations-section h3 {
+  color: #333;
+}
+
+.job-list {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-item {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: #333;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.job-item:hover {
+  transform: scale(1.05);
+  box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.job-item h3 {
+  font-size: 18px;
+  color: #222;
+}
+
+.job-item p {
+  font-size: 14px;
+  color: #444;
+}
+
+
+.skill-item {
+  background-color: #ffdd57;
+  color: #333;
+  padding: 8px;
+  margin: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 14px;
+}
