@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Link from "next/link";  // ✅ Import Link
 import "./login.css";
 
 export default function Signup() {
@@ -63,7 +64,7 @@ export default function Signup() {
           </button>
         </form>
         <p className="signup-link">
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <Link href="/login">Login</Link>
         </p>
       </div>
     </div>
