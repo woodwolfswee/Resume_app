@@ -19,7 +19,18 @@ const userSchema = new mongoose.Schema({
   skills: [String],
 });
 
+const jobSchema = new mongoose.Schema({
+  title: String,
+  company: String,
+  location: String,
+  skills: [String],
+  description: String,
+  salary: String,
+  type: String,
+});
+
 const User = mongoose.model("User", userSchema);
+const Job = mongoose.model("Job", jobSchema);
 
 // Register
 app.post("/register", async (req, res) => {
@@ -81,6 +92,23 @@ app.post("/save-skills", async (req, res) => {
   } catch (error) {
     console.error("Error saving skills:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Job Recommendations API
+app.post("/recommendations", async (req, res) => {
+  const { skills } = req.body;
+
+  if (!skills || skills.length === 0) {
+    return res.status(400).json({ message: "No skills provided" });
+  }
+
+  try {
+    const jobs = await Job.find({ skills: { $in: skills } });
+    res.status(200).json({ jobs });
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

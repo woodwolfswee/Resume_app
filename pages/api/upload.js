@@ -5,9 +5,6 @@ import { promisify } from "util";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import pdfParse from "pdf-parse";
 import mammoth from "mammoth";
-import jwt from "jsonwebtoken";
-import axios from "axios";
-import { parse } from "cookie";
 
 const unlinkFile = promisify(fs.unlink);
 
@@ -63,30 +60,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // Extract user ID from token stored in cookies
-    const cookies = parse(req.headers.cookie || "");
-    const token = cookies.token;
-
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized: No token found" });
-    }
-
-    let userId;
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      userId = decoded?.userId;
-    } catch (err) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-
-    if (!userId) {
-      return res.status(400).json({ error: "User ID not found in token" });
-    }
-
     const extractedText = await extractText(req.file.path, req.file.mimetype);
     const skills = [
       ...new Set(
-        (extractedText.match(/\b(Java|Python|AWS|React|Node\.js|SQL|MongoDB)\b/gi) || []).map(skill => skill.toLowerCase())
+        (extractedText.match(/\b(Java|Python|AWS|React|Node\.js|SQL|MongoDB|Javascript|CSS|HTML|AI|Networking|Flutter|Kubernetes|Docker)\b/gi) || []).map(skill => skill.toLowerCase())
       ),
     ];
 
@@ -101,17 +78,9 @@ export default async function handler(req, res) {
     await s3.send(new PutObjectCommand(uploadParams));
     await unlinkFile(req.file.path);
 
-    // Send skills to MongoDB
-    const response = await axios.post(
-      `${process.env.BACKEND_URL}/save-skills`,
-      { userId, skills },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
     return res.status(200).json({
       message: "Upload successful",
-      extractedSkills: skills,
-      serverResponse: response.data,
+      extractedSkills: skills, // ✅ Return extracted skills
     });
   } catch (error) {
     console.error("Upload error:", error);

@@ -12,8 +12,8 @@ export default function Dashboard() {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState("");
-  const [jobRecommendations, setJobRecommendations] = useState([]);
   const [extractedSkills, setExtractedSkills] = useState([]);
+  const [jobRecommendations, setJobRecommendations] = useState([]);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -45,22 +45,31 @@ export default function Dashboard() {
     formData.append("resume", file);
 
     try {
-      const token = localStorage.getItem("token"); // Get token from storage
+      const response = await axios.post("/api/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-    const response = await axios.post("/api/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token},`
-      },
-     });
-
-      setUploadMessage("Upload successful");
+      setUploadMessage("Upload successful!");
       setExtractedSkills(response.data.extractedSkills);
+
+      // Fetch job recommendations
+      fetchJobRecommendations(response.data.extractedSkills);
     } catch (error) {
       console.error("Upload error:", error);
-      setUploadMessage("Upload failed");
+      setUploadMessage("Upload failed! Try again.");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const fetchJobRecommendations = async (skills) => {
+    if (!skills || skills.length === 0) return;
+
+    try {
+      const response = await axios.post(`http://localhost:5000/recommendations`, { skills });
+      setJobRecommendations(response.data.jobs || []);
+    } catch (error) {
+      console.error("Error fetching job recommendations:", error);
     }
   };
 
@@ -84,6 +93,7 @@ export default function Dashboard() {
           <h3>Upload Your Resume</h3>
           <input type="file" id="file-upload" onChange={handleFileChange} hidden />
           <label htmlFor="file-upload" className="file-upload-label">Choose File</label>
+          {file && <p className="file-name">Selected File: {file.name}</p>}
           <button className="upload-button" onClick={handleUpload} disabled={uploading}>
             {uploading ? "Uploading..." : "Upload"}
           </button>
@@ -110,7 +120,9 @@ export default function Dashboard() {
           {jobRecommendations.length > 0 ? (
             <ul>
               {jobRecommendations.map((job, index) => (
-                <li key={index} className="skill-item">{job}</li>
+                <li key={index} className="job-item">
+                  <strong>{job.title}</strong> at {job.company}
+                </li>
               ))}
             </ul>
           ) : (
